@@ -32,6 +32,8 @@ func NewMainWindow() (*MainWindow, error) {
 	return NewMainWindowWithName("")
 }
 
+var winStyle uint32 = win.WS_OVERLAPPEDWINDOW
+
 func NewMainWindowWithName(name string) (*MainWindow, error) {
 	mw := new(MainWindow)
 	mw.SetName(name)
@@ -40,7 +42,7 @@ func NewMainWindowWithName(name string) (*MainWindow, error) {
 		mw,
 		nil,
 		mainWindowWindowClass,
-		win.WS_OVERLAPPEDWINDOW,
+		winStyle,
 		win.WS_EX_CONTROLPARENT); err != nil {
 
 		return nil, err
@@ -84,6 +86,24 @@ func NewMainWindowWithName(name string) (*MainWindow, error) {
 	succeeded = true
 
 	return mw, nil
+}
+
+func (mw *MainWindow) SetMinimizeBox(minbox bool) {
+	if !minbox {
+		winStyle = winStyle - win.WS_MINIMIZEBOX
+	}
+}
+
+func (mw *MainWindow) SetMaximizeBox(maxbox bool) {
+	if !maxbox {
+		winStyle = winStyle - win.WS_MAXIMIZEBOX
+	}
+}
+
+func (mw *MainWindow) SetFixedSize(fixed bool) {
+	if fixed {
+		winStyle = winStyle - win.WS_SIZEBOX
+	}
 }
 
 func (mw *MainWindow) Menu() *Menu {
